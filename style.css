@@ -1,0 +1,141 @@
+/* ===== 全体 ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Playfair Display", serif;
+}
+
+body {
+  min-height: 100vh;
+  background: url("background1.JPG") no-repeat center center;
+  background-size: cover;
+}
+
+/* ===== フレーム ===== */
+.frame {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("frame.png") no-repeat center center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+/* ===== クロッシュ ===== */
+.cloche {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+}
+
+#countdown {
+  position: absolute;
+  top: 7%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 65%;
+  z-index: 20;
+}
+
+#countImg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 時計の針 */
+#hourHand, #minuteHand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotate(0deg);
+}
+
+#hourHand {
+  width: 10%;
+  animation: rotateHour 12s linear infinite;
+  display: none;
+}
+
+#minuteHand {
+  width: 4%;
+  animation: rotateMinute 1s linear infinite;
+  display: none;
+}
+
+@keyframes rotateHour {
+  from { transform: translate(-50%, -100%) rotate(0deg); }
+  to   { transform: translate(-50%, -100%) rotate(360deg); }
+}
+
+@keyframes rotateMinute {
+  from { transform: translate(-50%, -100%) rotate(0deg); }
+  to   { transform: translate(-50%, -100%) rotate(360deg); }
+}
+
+/* 揺れアニメ */
+@keyframes shake {
+  0% { rotate: 0deg; }
+  20% { rotate: 10deg; }
+  40% { rotate: -10deg; }
+  60% { rotate: 6deg; }
+  80% { rotate: -6deg; }
+  100% { rotate: 0deg; }
+}
+.shake {
+  animation: shake 0.5s;
+  transform-origin: center;
+}
+
+/* 白フェード */
+#whiteFade {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  z-index: 9999;
+}
+
+/* モーダル */
+.first-alert {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+.first-alert-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.alert-title {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+#alert-ok {
+  margin-top: 20px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(242, 156, 159, 0.9);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#alert-ok:hover {
+  background: rgba(240, 148, 151, 1);
+}

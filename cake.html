@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ケーキページ</title>
+  <link rel="stylesheet" href="cake.css">
+  <!-- フォント -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  
+  <!-- ケーキ -->
+  <div class="cake-wheel">
+<div class="slice" data-modal-img="modal1.png" data-modal-title="フルーツケーキ" data-modal-desc="美味しいフルーツケーキ">
+  <img src="cake1.png" alt="フルーツケーキ">
+  <div class="hover-order">Order?</div>
+
+</div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="抹茶ケーキ" data-modal-desc="香ばしい抹茶ケーキ">
+      <img src="cake2.png" alt="抹茶ケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="チョコケーキ" data-modal-desc="濃厚チョコケーキ">
+      <img src="cake3.png" alt="チョコケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="チーズケーキ" data-modal-desc="クリーミーチーズケーキ">
+      <img src="cake4.png" alt="チーズケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="ベリーケーキ" data-modal-desc="甘酸っぱいベリーケーキ">
+      <img src="cake5.png" alt="ベリーケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="ショートケーキ" data-modal-desc="ふわふわショートケーキ">
+      <img src="cake6.png" alt="ショートケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="モンブラン" data-modal-desc="栗たっぷりモンブラン">
+      <img src="cake7.png" alt="モンブラン">
+      <div class="hover-order">Order?</div>
+    </div>
+    <div class="slice" data-modal-img="modal1.png" data-modal-title="キャロットケーキ" data-modal-desc="ヘルシーキャロットケーキ">
+      <img src="cake8.png" alt="キャロットケーキ">
+      <div class="hover-order">Order?</div>
+    </div>
+  </div>
+
+  <!-- 背景フレーム -->
+  <div class="frame"></div>
+
+  <!-- BGM左上にベル -->
+<div class="bgm-toggle">
+  <img id="bell-icon" src="bell-on.png" alt="BGM" />
+</div>
+
+<!-- BGM確認ポップアップ -->
+<div id="bgm-popup" class="modal modal-check">
+  <div class="modal-content-bgm">
+    <p>BGMを流しますがよろしいですか？</p>
+    <p>（ベルマークをクリックするとBGMが流れます。<br>
+      ベルが白いとBGMが流れ、黒いとBGMが止まります。）</p>
+    <div class="buttons">
+      <button id="bgm-ok" class="btn-ok">OK</button>
+      <button id="bgm-no" class="btn-no">NO</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<audio id="bgm" loop>
+  <source src="my-bgm.mp3" type="audio/mp3">
+</audio>
+
+<!-- 時計コンテナ -->
+<div class="clock">
+  <img src="clock.png" alt="時計盤" class="clock-dial">
+
+  <div class="hand-wrapper hour">
+    <img src="hour.png" class="hand hour">
+  </div>
+  <div class="hand-wrapper minute">
+    <img src="minute.png" class="hand">
+  </div>
+  <div class="hand-wrapper second">
+    <img src="second.png" class="hand">
+  </div>
+</div>
+
+<!-- 音源 -->  
+<audio id="click-sound" src="click.mp3"></audio>
+<audio id="order-sound" src="ching.mp3"></audio>
+<audio id="letter-sound" src="letter-open.mp3"></audio>
+<audio id="cup-sound" src="cup-appear.mp3"></audio> <!-- ★ ティーカップ登場音 -->
+
+
+  <!-- モーダル -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <img id="modal-img" src="" alt="">
+        <img id="modal-cake-img" src="" alt="選択したケーキ">
+
+      <h2 id="modal-title"></h2>
+      <p id="modal-desc"></p>
+      <button id="modal-close">閉じる</button>
+    </div>
+  </div>
+
+
+  <!-- 右上に出す終了アイコン（初期は非表示） -->
+<img id="end-icon" src="end-icon.png" alt="end" class="hidden end-icon" />
+
+<!-- 終了確認ポップアップ -->
+<div id="end-popup" class="modal modal-check hidden">
+  <div class="modal-content-finish">
+    <p>終わりにしますか？</p>
+    <p>（OKを押すとこちらの画面は見られなくなります）</p>
+    <div class="buttons">
+      <button id="end-ok" class="btn-ok">OK</button>
+      <button id="end-no" class="btn-no">NO</button>
+    </div>
+  </div>
+</div>
+
+<!-- 終了後に表示するティーセット -->
+<div id="tea-set" class="hidden tea-set">
+  <img src="plate.png" class="plate">
+  <img src="cup1.png" class="teacup">
+  <img src="handle.png" class="handle">
+</div>
+
+<!-- 手紙モーダル -->
+<div class="modal" id="letter-modal">
+  <div class="modal-content">
+    <img src="thankyou-letter.png" alt="手紙">
+
+    <!-- タイトル -->
+    <h2 class="letter-title">Thank you for staying with me till the end.</h2>
+
+    <!-- ★ 経過時間表示用 -->
+    <p id="tea-time" class="tea-time"></p>
+
+    <div class="letter-text">
+      <p class="message">
+        ご覧いただきありがとうございます。<br>
+        少しでも楽しんでいただけたら嬉しいです。
+      </p>
+      <p class="message hidden">
+        じっくりご覧いただきありがとうございました。<br>
+        まだまだ学びの途中ですが、自分の”好き"を形にして、<br>
+        挑戦を重ねていきたいと思っています。<br>
+        また見に来ていただけたら嬉しいです。
+      </p>
+      <p class="message hidden long-text">
+        細部まで丁寧に見てくださったことに、心から感謝いたします。<br>
+        このサイトは試行錯誤を重ねながら制作したもので、<br>
+        誰かの心に届き、自分自身も満たされる。そんな作品を目指してつくりました。<br>
+        もしご覧いただく中で<br>
+        「発想が面白い」「デザインが工夫されている」「心に残った」<br>
+        と思っていただけたなら、それ以上に嬉しいことはありません。<br>
+        これからも挑戦を続け、より良いものをつくれるよう努力してまいりますので、<br>
+        今後ともあたたかく見守っていただければ幸いです。
+      </p>
+    </div>
+
+<!-- 感想フォーム -->
+<div class="feedback-form">
+  <h3 class="feedback-title">ご感想・メッセージはこちら</h3>
+  <textarea id="feedback" placeholder="よろしければ、ご意見やご感想をお聞かせください。" rows="4"></textarea>
+  <button id="send-feedback">送信</button>
+  <p id="feedback-msg" class="hidden">送信しました！ありがとうございます</p>
+</div>
+
+    <button id="go-home">最初に戻る</button> 
+  </div>
+</div>
+
+      <!-- 白フェード用 -->
+    <div id="whiteFade"></div>
+
+    <!-- 入店音 -->
+    <audio id="enterSound" src="enter.mp3"></audio>
+
+  <script src="cake.js" defer></script>
+</body>
+</html>

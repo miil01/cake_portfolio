@@ -1,0 +1,655 @@
+/* 背景画像 */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Playfair Display", serif;
+  overflow: hidden; /* スクロール禁止 */
+}
+body {
+  background: url("background2.jpeg") no-repeat center center;
+  background-size: cover;
+}
+
+/* フォント */
+.playfair-display-regular {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h2, p, button {
+    font-family: "Playfair Display", serif;
+}
+
+/* 背景フレーム */
+.frame { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  /* フレームだけの画像を重ねる */
+  background: url("frame2.png") no-repeat center center; 
+  background-size: contain; /* 全体が必ず収まる */ 
+  box-sizing: border-box;
+  pointer-events: none;    /* クリックは通す */
+}
+
+/* ケーキピース */
+.slice {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  transform-origin: 50% 100%;
+}
+
+.slice img {
+  width: 100%;
+  height: 200%;
+  object-fit: contain; /* 画像の縦横比を維持してスライス内に収める */
+  transition: filter 0.3s, transform 0.3s;
+}
+
+/* ケーキピースホバー */
+.slice img:hover {
+  filter: brightness(1.1) sepia(0.2) saturate(2) hue-rotate(-20deg);
+  transform: scale(1.05); /* 少し拡大で華やかに */
+}
+
+
+.slice.sparkle img {
+  animation: sparkle 1s infinite;
+}
+
+
+
+/* スプーン・フォークの大きさ*/
+.slice img.spoon-fork {
+  width: 100%;   /* 好きな大きさ */
+  height: 100%; /* 縦横比を維持 */
+  transform: translateY(50%); /* 下方向に少し戻す */
+}
+
+/* スプーン・フォーク時のホバー */
+
+/* ホバー文字order */
+/* 初期状態 */
+.slice .hover-order {
+  position: absolute;
+  top: 100%; /* 中央に配置 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; /* flexにしておいて、opacityで制御する */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: url("cake-hover.png") no-repeat center/contain;
+  color: white;
+  font-weight: bold;
+  font-size: 130%;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;             /* 初期は非表示 */
+  pointer-events: none;   /* クリック不可 */
+  transition: opacity 0.3s;
+}
+
+/* 🍴 スプーン/フォークになってる slice のときだけ hover 有効 */
+.slice.hover-enabled:hover .hover-order {
+  opacity: 1;
+  pointer-events: auto; /* この時だけクリック可能 */
+}
+
+
+/* スプーン・フォークのときだけホバー表示 */
+.slice img[src*="spoon.png"]:hover + .hover-order,
+.slice img[src*="fork.png"]:hover + .hover-order {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* ケーキホイール回転 */
+.cake-wheel {
+  position: relative; 
+  top: 50%;
+  left: 50%;
+  width: 350px;
+  height: 700px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.slice:nth-child(1) { transform: rotate(0deg); }
+.slice:nth-child(2) { transform: rotate(45deg); }
+.slice:nth-child(3) { transform: rotate(90deg); }
+.slice:nth-child(4) { transform: rotate(135deg); }
+.slice:nth-child(5) { transform: rotate(180deg); }
+.slice:nth-child(6) { transform: rotate(225deg); }
+.slice:nth-child(7) { transform: rotate(270deg); }
+.slice:nth-child(8) { transform: rotate(315deg); }
+
+
+/* モーダル */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+  top: 0%;   /* 上から10px */
+  right: 13%; /* 右から10px */
+  width: 100%; 
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 0; /* 画像全面にしたいので余白は0 */
+  text-align: center;
+}
+
+/* モーダル画像 */
+.modal-content img {
+  width: 170%;   /* モーダル幅いっぱいに */
+  height: auto;
+  display: block;
+}
+
+/* 閉じるボタン */
+#modal-close {
+  position: absolute;
+  top: 80%;   /* 上から10px */
+  right: 10%; /* 右から10px */
+  border: none;
+  background: rgba(242, 156, 159, 0.8); /* 少し透けると画像と馴染む */
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 6px 12px;
+  z-index: 10;
+}
+
+/* タイトル・説明 */
+#modal-title, #modal-desc {
+  position: absolute;
+  top: 30%;   /* 上から10px */
+  left: 85%;
+  transform: translateX(-50%);
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  z-index: 5;
+}
+
+/* タイトル名配置*/
+#modal-title {
+  position: absolute;
+  top: 18%;       /* 画像上端から少し下 */
+  left: 85%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  z-index: 5;
+  white-space: normal;   /* 文字の折り返しを有効に */
+  width: 90%;            /* 幅を広げて中央寄せ */
+}
+
+/* 説明欄配置 */
+#modal-desc {
+  position: absolute;
+  top: 60%;   /* 画像下から20%上に配置 */
+  left: 85%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  z-index: 5;
+  white-space: normal;
+  width: 80%;
+}
+.hidden {
+  /* 非表示状態のスタイル */
+  display: none;
+}
+
+/*BGM オンオフ */
+.bgm-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.bgm-toggle img {
+  width: 20%;
+  transition: transform 0.3s ease;
+}
+
+.bgm-toggle img:hover {
+  transform: scale(1.1) rotate(-5deg); /* ホバーでちょっと遊び心 */
+}
+
+/*右下時計 */
+/* 時計コンテナ */
+.clock {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  aspect-ratio: 1/1;
+}
+
+.clock-dial {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* ラッパーを時計の中心に */
+.hand-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center; /* 中心を回転の起点に */
+}
+
+/* 針画像をラッパー内で調整 */
+.hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%); /* 針の根元をラッパー中心に置く */
+  transform-origin: 50% 100%;        /* 下端が回転軸 */
+  height: 40%;   /* 時計の大きさに応じて調整 */
+  width: auto;
+}
+.hand.hour {
+  height: 20% !important;
+}
+
+
+/* 右上の終了アイコン */
+.hidden {
+  opacity: 0;
+  pointer-events: none; /* クリック不可 */
+  transition: opacity 0.3s;
+}
+.end-icon {
+  position: fixed;
+  top: 1%;
+  right: 1%;
+  width: 25%;
+  height: 25%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.end-icon.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.end-icon:hover {
+  transform: scale(1.1) rotate(-5deg); /* ホバーでちょっと遊び心 */
+}
+
+
+/* BGM・終了ポップアップ共通 */
+.modal-check {
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+
+}
+
+.modal-check .modal-content  {
+  background: #fff;
+  padding: 1%;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  width: 80%;            
+  max-width: 500px; 
+  position: fixed;
+  top: 40%;
+  left: 30%;
+
+}
+
+.modal-check .buttons {
+  margin-top: 3%;
+  display: flex;
+  gap: 5%;
+  justify-content: center;
+}
+
+.modal-check button {
+  padding: 2% 8%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-check .btn-ok {
+  background: rgba(242, 156, 159, 0.8);
+  color: #fff;
+}
+
+.modal-check .btn-no {
+  background: #000;
+  color: #fff;
+}
+
+
+/* ティーセット全体 */
+.tea-set {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;   /* お皿サイズに合わせる */
+  height: auto;
+  z-index: 1500;
+}
+
+/* お皿を中央 */
+.plate {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* カップをお皿の上に中央配置 */
+/* ティーカップ */
+.teacup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: auto;
+  z-index: 2;
+  transition: filter 0.3s, transform 0.3s;
+  cursor: pointer; /* ←ホバー感が出るように */
+}
+
+/* ティーカップホバー */
+.teacup:hover {
+  filter: brightness(1.1) sepia(0.2) saturate(2) hue-rotate(-20deg);
+  transform: translate(-50%, -50%) scale(1.1); 
+}
+
+
+/* 取っ手 */
+.handle {
+  position: absolute;
+  top: 40%;       /* カップ上端に合わせて微調整 */
+  left: 50%;      /* カップ右端あたりに配置 */
+  width: 25%;     /* カップに対してのサイズ */
+  height: auto;
+  z-index: 1;     /* カップより後面に表示 */
+transform-origin: 0% 50%; /* 左右や上下で微調整 */
+}
+
+.hidden {
+  display: none;
+}
+
+.teacup, .handle, .plate {
+  opacity: 0;
+  transform: translateY(-50px) scale(0.8); /* ちょっと浮かせて小さく */
+  transition: all 0.6s ease;
+}
+
+.teacup.show, .handle.show, .plate.show {
+  opacity: 1;
+  transform: translateY(0) scale(1); /* 置かれた状態 */
+}
+
+
+
+/* 手紙モーダル全体（背景） */
+#letter-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+#letter-modal.active {
+  display: flex;
+}
+
+/* 手紙モーダル内容 */
+#letter-modal .modal-content {
+  position: fixed;         /* 画面全体に固定 */
+  top: 50%;                /* 垂直中央 */
+  left: 50%;               /* 水平中央 */
+  transform: translate(-50%, -50%); /* 完全中央に配置 */
+  width: 80%;              /* 横幅調整 */
+  max-width: 700px;        /* 最大幅 */
+  text-align: center;
+  height: auto;
+}
+
+/* 手紙画像 */
+#letter-modal .modal-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* タイトル */
+.letter-title {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 2rem;
+  color: rgb(217, 187, 110);
+  font-weight: bold;
+}
+
+/* 経過時間表示 */
+#tea-time {
+  position: absolute;       /* タイトルの下に配置 */
+  top: 18%;   /* タイトルの top 10% + タイトル高さ分 */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: center;
+}
+
+/* テキスト */
+.letter-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  text-align: center;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  z-index: 20;
+}
+
+.message span {
+  border-bottom: 2px dotted #fff; /* 文字下に点線 */
+  display: inline-block;          /* 各文字ごとに反応させる */
+}
+
+/* 長文メッセージ用: 行間詰め & 文字フェードイン */
+.message.long-text {
+  font-size: 0.8em;     
+  line-height: 1.0;      /* 行間を詰める */
+  text-align: center;
+  margin: 0;             /* 段落余白を消す */
+  padding: 0;
+}
+
+/* 「最初に戻る」ボタン */
+#go-home {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  background: rgba(242, 156, 159, 0.9);
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 1rem;
+  z-index: 30;
+}
+
+#go-home:hover {
+  background: rgba(240, 148, 151, 1);
+}
+
+
+/* 感想フォーム */
+.feedback-form {
+  position: absolute;
+  bottom: 20%;   /* 最下部から少し上 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  text-align: center;
+  z-index: 30;
+}
+
+.feedback-form textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: "Playfair Display", serif;
+  font-size: 1rem;
+  resize: none;
+}
+
+.feedback-form button {
+  margin-top: 8px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(242, 156, 159, 0.9);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.feedback-form button:hover {
+  background: rgba(240, 148, 151, 1);
+}
+
+#feedback-msg {
+  margin-top: 6px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.feedback-title {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #fff;
+  text-align: center;
+}
+
+
+  #whiteFade {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none; /* 操作できないように */
+  transition: opacity 2s ease; /* 2秒かけてフェード */
+  z-index: 9999; /* 最前面 */
+}
+
+/* モーダル上に表示するケーキ画像 */
+/* モーダル上に表示するケーキ画像 */
+#modal-cake-img {
+  position: absolute;
+  top: 30%;              /* モーダルの上に出す */
+  left: 85%;              /* ★ 中央 */
+  transform: translateX(-50%);
+  width: 200px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.modal-content-finish{
+  position: fixed;         /* 画面全体に固定 */
+  top: 50%;                /* 垂直中央 */
+  left: 50%;               /* 水平中央 */
+  transform: translate(-50%, -50%); /* 完全中央に配置 */
+  width: 80%;              /* 横幅調整 */
+  max-width: 700px;        /* 最大幅 */
+  text-align: center;
+  height: auto;
+
+    background: #fff;
+  padding: 1%;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  width: 80%;            
+  max-width: 500px; 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+.modal-content-bgm{
+    position: fixed;         /* 画面全体に固定 */
+  top: 50%;                /* 垂直中央 */
+  left: 50%;               /* 水平中央 */
+  transform: translate(-50%, -50%); /* 完全中央に配置 */
+  width: 80%;              /* 横幅調整 */
+  max-width: 700px;        /* 最大幅 */
+  text-align: center;
+  height: auto;
+
+    background: #fff;
+  padding: 1%;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  width: 80%;            
+  max-width: 500px; 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Cake Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="frame"> </div>
+
+    <div class="cloche">
+      <img src="cloche.png" alt="クロッシュボタン" id="cloche">
+    
+      <div id="countdown">
+        <img id="countImg" style="display:none;" alt="クリックカウント" />
+        <img id="hourHand" src="hour.png" style="display:none;" alt="短針">
+        <img id="minuteHand" src="minute.png" style="display:none;" alt="長針">
+      </div>
+    </div>
+  <!---カチカチ音-->
+  <audio id="tickSound" src="tick.mp3" loop></audio>
+  <!-- 白フェード用 -->
+<div id="whiteFade"></div>
+
+<!-- 入店音 -->
+<audio id="enterSound" src="enter.mp3"></audio>
+  <script src="script.js"></script>
+
+
+  
+ <!-- 初回注意モーダル -->
+<div id="first-alert" class="first-alert">
+  <div class="first-alert-content">
+    <p class="alert-title">ご案内</p>
+    <p>
+      このサイトは<strong>音が出ます</strong>。<br>
+      <strong>パソコンでの閲覧</strong>を推奨します。
+    </p>
+    <button id="alert-ok">OK</button>
+  </div>
+</div>
+ 
+  
+
+</body>
+
+</html>
